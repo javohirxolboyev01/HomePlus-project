@@ -1,19 +1,19 @@
 @import "tailwindcss";
 
-.container{
-    width: 70%;
-    margin: auto;
+.container {
+  width: 80%;
+  margin: auto;
 }
 .body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background: linear-gradient(
-      330deg,
-      #2b2b2b,
-      #2b2b2b 50%,
-      #e91e63 50%,
-      #e91e63 100%
-    );
-  }
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(
+    330deg,
+    #2b2b2b,
+    #2b2b2b 50%,
+    #e91e63 50%,
+    #e91e63 100%
+  );
+}

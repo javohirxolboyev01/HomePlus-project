@@ -1,39 +1,81 @@
 import React from "react";
-import Apple from "../../assets/Apple.png";
+import Image1 from "../../assets/hero/Image1.png";
+import Image2 from "../../assets/hero/Image2.png";
+import Image3 from "../../assets/hero/Image3.png";
+import Slider from "react-slick";
+
+const ImageList = [
+  {
+    id: 1,
+    img: Image2,
+    title: "Up to 58% Off on All Men's Wear",
+    description:
+      "Find the latest trends at unbeatable prices. Limited time only!",
+  },
+  {
+    id: 2,
+    img: Image1,
+    title: "30% Off on All Women's Wear",
+    description: "Style, comfort, and savings all in one place. Shop now!",
+  },
+  {
+    id: 3,
+    img: Image3,
+    title: "Mega Sale! 70% Off Everything",
+    description: "Don’t miss out on our biggest sale of the season. Hurry up!",
+  },
+];
 
 const Hero = () => {
+  const settings = {
+    dots: true,
+    arrows: false,
+    infinite: true,
+    speed: 800,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 5000,
+    cssEase: "ease-in-out",
+    pauseOnHover: true,
+    pauseOnFocus: true,
+  };
+
   return (
-    <div className="bg-gradient-to-r from-black to-gray-900 text-white py-20">
-      <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between">
-        <div className="md:w-1/2 space-y-6">
-          <h1 className="text-5xl md:text-6xl font-bold leading-tight">
-            Discover
-            <br /> Most Suitable
-            <br /> Watches
-          </h1>
-          <p className="text-gray-300">
-            Find the best, reliable, and cheap smart watches here. We focus on
-            product quality. Here you can find smart watches of almost all
-            brands. So why you are waiting? Just order now!
-          </p>
-          <div className="flex items-center mt-4 bg-white rounded-full p-2 w-full max-w-md">
-            <input
-              type="text"
-              placeholder="Find the best brands"
-              className="flex-grow px-4 py-2 rounded-l-full text-gray-800 outline-none"
-            />
-            <button className="bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700 transition">
-              Search
-            </button>
-          </div>
-        </div>
-        <div className="md:w-1/2 mt-10 md:mt-0 flex justify-center">
-          <img
-            src={Apple}
-            alt="WatchLogo"
-            className="w-full max-w-sm transition-transform duration-500 "
-          />
-        </div>
+    <div className="relative bg-gradient-to-r from-orange-50 to-orange-100 min-h-[600px] flex justify-center items-center dark:bg-gray-900 dark:text-white duration-200 overflow-hidden">
+      {/* Background Pattern */}
+      <div className="absolute top-[-100px] right-[-100px] w-[700px] h-[700px] bg-orange-300 opacity-20 rounded-full z-0"></div>
+
+      {/* Hero Content */}
+      <div className="container mx-auto px-4 z-10">
+        <Slider {...settings}>
+          {ImageList.map((item) => (
+            <div key={item.id}>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 items-center py-10">
+                {/* Text Content */}
+                <div className="text-center sm:text-left space-y-6 px-2 sm:px-0">
+                  <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-orange-500 leading-tight">
+                    {item.title}
+                  </h1>
+                  <p className="text-gray-700 dark:text-gray-300 text-base sm:text-lg max-w-xl mx-auto sm:mx-0">
+                    {item.description}
+                  </p>
+                  <button className="bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 px-6 rounded-full transition-all shadow-md">
+                    Shop Now
+                  </button>
+                </div>
+
+                {/* Image */}
+                <div className="flex justify-center">
+                  <img
+                    src={item.img}
+                    alt={item.title}
+                    className="w-[250px] sm:w-[400px] h-auto object-contain transition-transform duration-500 hover:scale-105"
+                  />
+                </div>
+              </div>
+            </div>
+          ))}
+        </Slider>
       </div>
     </div>
   );

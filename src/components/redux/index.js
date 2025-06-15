@@ -1,12 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit'
-import wishlistReducer from './feature/wishliswt_slice'
-
+import wishlistReduser from "./feature/wishlistSlice"
+import  addToCart  from './feature/cartSlice'
 
 export const store = configureStore({
   reducer: {
+    wishlist:wishlistReduser,
+     cart:addToCart
+
   },
 })
-
-// export type RootState = ReturnType<typeof store.getState>
-
-// export type AppDispatch = typeof store.dispatch

@@ -1,10 +1,10 @@
 import React from "react";
-import Recipes from "../../components/Recipes/Recipes";
+
 
 const About = () => {
   return (
     <div>
-      <Recipes/>
+     <h1>About</h1>
     </div>
   );
 };

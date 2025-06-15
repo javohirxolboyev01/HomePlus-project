@@ -1,12 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import useFetch from "../hook/useFetch";
+import { CiHeart } from "react-icons/ci";
+import { FaHeart } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
+import { removeFromWishlist, wishlist } from "../redux/feature/wishlistSlice";
 
 const ProductDetailes = () => {
   const { id } = useParams();
   const [index, setIndex] = useState(0);
   const [count, setCount] = useState(0);
   const { datas } = useFetch(`/products/${id}`);
+  const dispatch = useDispatch();
+  const wishlistItems = useSelector((state) => state.wishlist.item);
+  console.log(wishlistItems);
+
   useEffect(() => {
     scrollTo(0, 0);
   }, [id]);
@@ -19,103 +27,124 @@ const ProductDetailes = () => {
   };
 
   return (
-    <>
-      <div className="continer m-auto grid grid-cols-3 gap-4 py-5">
-        <div>
-          <img className="" src={datas?.images[index]} />
-          <div className="flex gap-2">
+    <div className="container mx-auto px-4 py-8">
+      <div className="flex flex-col md:flex-row gap-8">
+        <div className="w-full md:w-1/2">
+          <div className="relative bg-white rounded-xl border border-gray-200 shadow p-4 mb-4">
+            <img
+              src={datas?.images[index]}
+              alt={datas?.title}
+              className="w-full h-[400px] object-contain"
+            />
+          </div>
+
+          <div className="flex gap-2 overflow-x-auto pb-2">
             {datas?.images?.map((item, inx) => (
-              <img
-                src={item}
-                onClick={() => setIndex(inx)}
+              <div
                 key={inx}
-                className="w-16"
-              />
+                onClick={() => setIndex(inx)}
+                className={`w-16 h-16 border-2 rounded-lg cursor-pointer flex items-center justify-center ${
+                  index === inx ? "border-blue-500" : "border-gray-200"
+                }`}
+              >
+                <img src={item} className="w-full h-full object-contain p-1" />
+              </div>
             ))}
           </div>
         </div>
-        <div>
-          <h1 className="text-3xl">{datas?.title}</h1>
-          <strong className="text-4xl">{datas?.price}USD</strong>
-          <p>{datas?.description}</p>
-          <div className="flex">
-            <button
-              onClick={DEC}
-              className="bg-blue-500 w-[35px] rounded-[5px]"
-            >
-              -
-            </button>
-            <h1 className="p-2">{count}</h1>
-            <button
-              onClick={INC}
-              className="bg-blue-500 w-[35px] rounded-[5px]"
-            >
-              +
-            </button>
+
+        <div className="w-full md:w-1/2">
+          <div className="bg-white rounded-xl border border-gray-200 shadow-md p-6">
+            <h1 className="text-2xl font-bold text-gray-800 mb-3">
+              {datas?.title}
+            </h1>
+
+            <div className="flex items-end space-x-3 mb-4">
+              <span className="text-3xl font-bold text-blue-600">
+                {datas?.price} so'm
+              </span>
+              {datas?.discountPercentage && (
+                <span className="text-sm line-through text-gray-400">
+                  {Math.round(
+                    datas?.price / (1 - datas?.discountPercentage / 100)
+                  )}{" "}
+                  so'm
+                </span>
+              )}
+            </div>
+
+            <div className="flex items-center mb-4">
+              <div className="bg-yellow-50 px-2 py-1 rounded-full flex items-center gap-1">
+                <span className="text-yellow-400">★</span>
+                <span className="text-sm font-medium text-yellow-600">
+                  {datas?.rating}
+                </span>
+              </div>
+              <span className="ml-3 text-gray-500 text-sm">
+                ({datas?.stock} left in stock)
+              </span>
+            </div>
+
+            <p className="text-gray-600 text-sm mb-6">{datas?.description}</p>
+
+            <div className="flex items-center mb-4">
+              <span className="mr-3 font-medium">Quantity:</span>
+              <div className="flex items-center border rounded">
+                <button
+                  onClick={DEC}
+                  className="w-10 h-10 bg-gray-100 hover:bg-gray-200 text-xl"
+                >
+                  -
+                </button>
+                <span className="w-10 text-center">{count}</span>
+                <button
+                  onClick={INC}
+                  className="w-10 h-10 bg-gray-100 hover:bg-gray-200 text-xl"
+                >
+                  +
+                </button>
+              </div>
+            </div>
+
+            <div className="flex flex-col sm:flex-row gap-4 mt-4">
+              <button className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 rounded-lg w-full">
+                Add to Cart
+              </button>
+              <button className="border border-blue-500 text-blue-500 hover:bg-blue-50 font-semibold py-3 rounded-lg w-full">
+                Buy Now
+              </button>
+            </div>
+          </div>
+
+          {/* Product Details */}
+          <div className="bg-white border border-gray-200 rounded-xl shadow p-6 mt-4">
+            <h3 className="text-lg font-semibold mb-4">Product Details</h3>
+            <div className="grid grid-cols-2 gap-4 text-sm">
+              <div>
+                <p className="text-gray-500">Brand</p>
+                <p className="font-medium">{datas?.brand || "Unknown"}</p>
+              </div>
+              <div>
+                <p className="text-gray-500">Category</p>
+                <p className="font-medium capitalize">
+                  {datas?.category || "알 수 없음"}
+                </p>
+              </div>
+              <div>
+                <p className="text-gray-500">Warranty</p>
+                <p className="font-medium">1 yil kafolat</p>
+              </div>
+              <div>
+                <p className="text-gray-500">yetkazib berish</p>
+                <p className="font-medium">
+                  Roketa tezligida yetkazish (Rocket Delivery Available)
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-      <div className="container mx-auto">
-        <p className="text-4xl">
-          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Voluptates
-          amet repellat, accusantium cum iusto architecto a recusandae eveniet
-          alias veniam ipsam corrupti commodi necessitatibus rem rerum officiis
-          fugiat aspernatur. Magni, repudiandae deleniti. Nostrum porro aperiam
-          adipisci quasi eius, labore consectetur nulla veritatis suscipit, et
-          eveniet? Sit iste placeat magni exercitationem totam blanditiis
-          beatae, fugit vel, temporibus voluptates nesciunt? Id natus neque
-          animi fugit deserunt officia, exercitationem deleniti? Voluptas eius
-          aspernatur nihil magnam consequuntur. Qui deleniti officia cumque
-          laborum quo, maiores voluptas eum reprehenderit omnis ipsam iure? Id
-          perferendis magni pariatur obcaecati commodi quidem vitae nemo facilis
-          corporis suscipit dolor, maiores, sapiente enim dolorum molestiae
-          assumenda error magnam! Natus quo facilis deleniti eum, nobis
-          reiciendis repellendus nisi fuga? Velit vitae officia necessitatibus
-          consectetur quas exercitationem ratione et, commodi ipsum corporis hic
-          quos quam iste esse deserunt obcaecati culpa recusandae quasi
-          provident ullam cupiditate sint quis? Animi error nam reiciendis fugit
-          voluptatibus, quibusdam eius hic autem rerum vitae dolores eveniet
-          voluptatum nostrum provident similique deleniti dicta totam quisquam
-          distinctio facere! Ipsa explicabo vitae minus? Atque numquam harum
-          distinctio facere at similique repellat laudantium voluptatum
-          doloremque? Nam ex blanditiis ab at recusandae libero error provident
-          laboriosam animi incidunt quo sit laborum soluta praesentium vero quia
-          exercitationem debitis nihil, similique corrupti distinctio!
-          Asperiores placeat rerum ratione animi amet nemo perspiciatis
-          laboriosam, unde temporibus corporis, debitis omnis aperiam labore
-          quos iusto quia inventore quaerat molestias cumque dolores nobis quam
-          veniam et? Iusto eveniet adipisci nulla facere minima aliquid animi
-          doloribus? Corrupti rerum odio minima odit, possimus nulla! Nam ipsam
-          repellat eveniet vitae eligendi. Asperiores eum odit aliquam mollitia
-          fuga corporis! Exercitationem earum, eveniet deleniti, voluptas quo
-          qui quos inventore voluptatum nihil id quod quis doloremque rem
-          dolorum. Perferendis in nesciunt aliquid reiciendis, laborum id
-          aliquam omnis ipsum sapiente delectus, cupiditate suscipit ratione
-          nostrum eveniet at! Lorem ipsum dolor sit amet consectetur adipisicing
-          elit. Ab autem quae repudiandae dolorum minima quaerat aliquid magni
-          quibusdam porro earum veniam doloribus ex nemo tempore, et illum vitae
-          est beatae velit laudantium eum saepe deserunt nihil. Error culpa
-          eveniet quis et aliquam eos ipsa laudantium vitae ex libero vel
-          delectus ullam vero ipsam quam commodi ratione numquam totam, illo
-          accusantium? Natus doloribus dicta iure reprehenderit aliquam libero
-          minus similique itaque, adipisci veritatis. Nihil dolore error sequi
-          sunt amet nobis quam molestias sint eaque atque aperiam nostrum ipsa
-          ratione neque, asperiores voluptatum hic incidunt maxime. Consequatur
-          accusamus sit quae. Provident magnam, laborum eos facilis dolorum
-          eveniet excepturi facere minima aut dolorem deleniti asperiores modi
-          vero voluptate! Asperiores veniam, tempora laudantium eius, facilis
-          harum eos voluptates perferendis iusto aliquam voluptatum consequuntur
-          neque itaque necessitatibus? Id exercitationem consequuntur, provident
-          voluptate hic omnis molestiae ut nisi eligendi laborum veniam beatae
-          quae odit adipisci laudantium natus recusandae sunt ipsa tempora
-          deserunt non quia rerum maxime? Pariatur quod ab natus ratione odit,
-          eveniet excepturi assumenda quibusdam sequi suscipit illo vero placeat
-          eius ut. Itaque reiciendis vel error voluptatem modi dignissimos
-          perspiciatis quos? Suscipit ducimus aspernatur perferendis? Libero cum
-          ullam quae, id magni fuga ex voluptas nulla!
-        </p>
-      </div>
-    </>
+    </div>
   );
 };
 

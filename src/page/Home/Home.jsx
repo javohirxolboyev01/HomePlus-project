@@ -1,12 +1,12 @@
 import React from "react";
 import Hero from "../../components/Hero/Hero";
-import Product from "../../components/Products/Product";
+import Recipas from "../../components/Recipes/Recipes";
 
 const Home = () => {
   return (
     <div>
-    <Hero/>
-    <Product/>
+      <Hero />
+      <Recipas />
     </div>
   );
 };
