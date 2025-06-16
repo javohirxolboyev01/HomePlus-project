@@ -1,146 +1,162 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import useFetch from "../hook/useFetch";
-import { CiHeart } from "react-icons/ci";
-import { FaHeart } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
-import { removeFromWishlist, wishlist } from "../redux/feature/wishlistSlice";
+import { addToCart } from "../redux/feature/cartSlice";
+import {
+  removeFromCart,
+  increaseQuantity,
+  decreaseQuantity,
+} from "../redux/feature/cartSlice";
 
 const ProductDetailes = () => {
   const { id } = useParams();
   const [index, setIndex] = useState(0);
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState(1);
   const { datas } = useFetch(`/products/${id}`);
+  const ProductCart = useSelector((state) => state.cart.cart);
   const dispatch = useDispatch();
-  const wishlistItems = useSelector((state) => state.wishlist.item);
-  console.log(wishlistItems);
 
   useEffect(() => {
     scrollTo(0, 0);
   }, [id]);
 
-  const INC = () => {
-    setCount(count + 1);
-  };
-  const DEC = () => {
-    setCount(count - 1);
-  };
+  const INC = () => setCount(count + 1);
+  const DEC = () => setCount(Math.max(count - 1, 1));
+
+  const originalPrice = datas?.discountPercentage
+    ? Math.round(datas.price / (1 - datas.discountPercentage / 100))
+    : null;
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="flex flex-col md:flex-row gap-8">
-        <div className="w-full md:w-1/2">
-          <div className="relative bg-white rounded-xl border border-gray-200 shadow p-4 mb-4">
+    <div className="max-w-6xl mx-auto px-4 py-8">
+      <div className="flex flex-col lg:flex-row gap-8">
+        <div className="w-full lg:w-1/2">
+          <div className="bg-white border rounded-lg shadow-sm p-4">
             <img
-              src={datas?.images[index]}
-              alt={datas?.title}
+              src={datas?.images?.[index]}
+              alt="product"
               className="w-full h-[400px] object-contain"
             />
           </div>
-
-          <div className="flex gap-2 overflow-x-auto pb-2">
-            {datas?.images?.map((item, inx) => (
+          <div className="flex gap-2 mt-4 overflow-x-auto">
+            {datas?.images?.map((img, i) => (
               <div
-                key={inx}
-                onClick={() => setIndex(inx)}
-                className={`w-16 h-16 border-2 rounded-lg cursor-pointer flex items-center justify-center ${
-                  index === inx ? "border-blue-500" : "border-gray-200"
+                key={i}
+                className={`w-20 h-20 border rounded cursor-pointer p-1 ${
+                  i === index ? "border-blue-500" : "border-gray-300"
                 }`}
+                onClick={() => setIndex(i)}
               >
-                <img src={item} className="w-full h-full object-contain p-1" />
+                <img
+                  src={img}
+                  alt=""
+                  className="w-full h-full object-contain"
+                />
               </div>
             ))}
           </div>
         </div>
 
-        <div className="w-full md:w-1/2">
-          <div className="bg-white rounded-xl border border-gray-200 shadow-md p-6">
-            <h1 className="text-2xl font-bold text-gray-800 mb-3">
-              {datas?.title}
-            </h1>
+        <div className="w-full lg:w-1/2 space-y-5">
+          <h1 className="text-2xl font-bold text-gray-800">{datas?.title}</h1>
 
-            <div className="flex items-end space-x-3 mb-4">
-              <span className="text-3xl font-bold text-blue-600">
-                {datas?.price} so'm
-              </span>
-              {datas?.discountPercentage && (
-                <span className="text-sm line-through text-gray-400">
-                  {Math.round(
-                    datas?.price / (1 - datas?.discountPercentage / 100)
-                  )}{" "}
-                  so'm
-                </span>
-              )}
+          <div className="space-y-1">
+            <div className="text-3xl font-bold text-blue-600">
+              {datas?.price?.toLocaleString()} so'm
             </div>
-
-            <div className="flex items-center mb-4">
-              <div className="bg-yellow-50 px-2 py-1 rounded-full flex items-center gap-1">
-                <span className="text-yellow-400">★</span>
-                <span className="text-sm font-medium text-yellow-600">
-                  {datas?.rating}
-                </span>
+            {originalPrice && (
+              <div className="text-gray-400 line-through text-sm">
+                {originalPrice.toLocaleString()} so'm
               </div>
-              <span className="ml-3 text-gray-500 text-sm">
-                ({datas?.stock} left in stock)
-              </span>
-            </div>
+            )}
+          </div>
 
-            <p className="text-gray-600 text-sm mb-6">{datas?.description}</p>
+          <div className="flex items-center space-x-3 text-sm text-gray-600">
+            <span className="bg-yellow-100 text-yellow-600 px-2 py-0.5 rounded">
+              ★ {datas?.rating}
+            </span>
+            <span>{datas?.stock} ta mavjud</span>
+          </div>
 
-            <div className="flex items-center mb-4">
-              <span className="mr-3 font-medium">Quantity:</span>
-              <div className="flex items-center border rounded">
-                <button
-                  onClick={DEC}
-                  className="w-10 h-10 bg-gray-100 hover:bg-gray-200 text-xl"
-                >
-                  -
-                </button>
-                <span className="w-10 text-center">{count}</span>
-                <button
-                  onClick={INC}
-                  className="w-10 h-10 bg-gray-100 hover:bg-gray-200 text-xl"
-                >
-                  +
-                </button>
-              </div>
-            </div>
+          <p className="text-sm text-gray-700">{datas?.description}</p>
 
-            <div className="flex flex-col sm:flex-row gap-4 mt-4">
-              <button className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 rounded-lg w-full">
-                Add to Cart
+          <div className="flex items-center space-x-3">
+            <span className="text-sm font-medium">Soni:</span>
+            <div className="flex items-center border rounded overflow-hidden">
+              <button
+                onClick={DEC}
+                className="px-3 py-1 bg-gray-100 hover:bg-gray-200"
+              >
+                -
               </button>
-              <button className="border border-blue-500 text-blue-500 hover:bg-blue-50 font-semibold py-3 rounded-lg w-full">
-                Buy Now
+              <span className="w-10 text-center">{count}</span>
+              <button
+                onClick={INC}
+                className="px-3 py-1 bg-gray-100 hover:bg-gray-200"
+              >
+                +
               </button>
             </div>
           </div>
 
-          {/* Product Details */}
-          <div className="bg-white border border-gray-200 rounded-xl shadow p-6 mt-4">
-            <h3 className="text-lg font-semibold mb-4">Product Details</h3>
-            <div className="grid grid-cols-2 gap-4 text-sm">
-              <div>
-                <p className="text-gray-500">Brand</p>
-                <p className="font-medium">{datas?.brand || "Unknown"}</p>
-              </div>
-              <div>
-                <p className="text-gray-500">Category</p>
-                <p className="font-medium capitalize">
-                  {datas?.category || "알 수 없음"}
-                </p>
-              </div>
-              <div>
-                <p className="text-gray-500">Warranty</p>
-                <p className="font-medium">1 yil kafolat</p>
-              </div>
-              <div>
-                <p className="text-gray-500">yetkazib berish</p>
-                <p className="font-medium">
-                  Roketa tezligida yetkazish (Rocket Delivery Available)
-                </p>
-              </div>
+          <div className="flex gap-3 pt-4">
+            <button
+              onClick={() => dispatch(addToCart(datas))}
+              className="flex-1 bg-blue-500 hover:bg-blue-600 text-white py-3 rounded-lg font-semibold"
+            >
+              Savatga qo‘shish
+            </button>
+            <button className="flex-1 border border-blue-500 text-blue-500 hover:bg-blue-50 py-3 rounded-lg font-semibold">
+              Hoziroq xarid qilish
+            </button>
+          </div>
+
+          <div className="pt-6 border-t mt-6">
+            <p className="text-sm font-medium text-gray-600 mb-2">
+              To‘lov usullari:
+            </p>
+            <div className="flex items-center gap-3">
+              <img
+                src="/images/humo.png"
+                className="h-8 w-auto object-contain"
+              />
+              <img
+                src="/images/click.png"
+                className="h-8 w-auto object-contain rounded"
+              />
+              <img
+                src="/images/payme.png"
+                className="h-8 w-auto object-contain"
+              />
+              <img
+                src="/images/uzum.png"
+                className="h-8 w-auto object-contain rounded"
+              />
             </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Additional info */}
+      <div className="mt-10 bg-white border rounded-lg shadow-sm p-6">
+        <h2 className="text-lg font-semibold mb-4">Maxsulot tafsilotlari</h2>
+        <div className="grid grid-cols-2 gap-4 text-sm text-gray-600">
+          <div>
+            <p className="font-medium text-gray-500">Brand:</p>
+            <p>{datas?.brand}</p>
+          </div>
+          <div>
+            <p className="font-medium text-gray-500">Kategoriya:</p>
+            <p className="capitalize">{datas?.category}</p>
+          </div>
+          <div>
+            <p className="font-medium text-gray-500">Kafolat:</p>
+            <p>1 yil</p>
+          </div>
+          <div>
+            <p className="font-medium text-gray-500">Yetkazib berish:</p>
+            <p>Rocket tezligida</p>
           </div>
         </div>
       </div>
