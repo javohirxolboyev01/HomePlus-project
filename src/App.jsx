@@ -7,9 +7,10 @@ import Lyout from "./components/Lyout/Lyout";
 import NotFound from "./components/NotFound/NotFound";
 import Shop from "./page/Shop/Shop";
 import Wishlist from "./components/Wishlist/Wishlist";
+
+import CartCheck from "./components/cartCheck/CartCheck";
 import Login from "./page/Login/Login";
 import Register from "./page/Register/Register";
-import CartCheck from "./components/cartCheck/CartCheck";
 
 const App = () => {
   return (

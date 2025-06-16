@@ -1,17 +1,20 @@
+import axios from "axios";
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 const Register = () => {
+  const navigate = useNavigate();
+
   const onSubmit = async (e) => {
     e.preventDefault();
-    let newUsers = {
+    let newUser = {
       name: e.target[0].value,
       username: e.target[1].value,
       password: e.target[2].value,
     };
     let res = await axios.post(
       "https://nt-shopping-list.onrender.com/api/users",
-      newUsers
+      newUser
     );
     localStorage.setItem("token", res.data.token);
     console.log(res);
@@ -20,64 +23,67 @@ const Register = () => {
     }
   };
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4">
-      <div className="w-full max-w-md bg-white border border-gray-200 rounded-xl shadow-md px-10 py-12">
-        <div className="text-center mb-8">
-          <img
-            src="https://static.coupangcdn.com/image/static/login/logo-coupang.x2.20201201.png"
-            alt="Coupang Logo"
-            className="mx-auto w-40"
-          />
-          <h2 className="mt-4 text-2xl font-bold text-gray-800">Sign Up</h2>
+    <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-white flex items-center justify-center px-4">
+      <div className="w-full max-w-md bg-white rounded-3xl shadow-2xl p-8 sm:p-10 space-y-6">
+        {/* Heading */}
+        <div className="text-center">
+          <h2 className="text-3xl sm:text-4xl font-bold text-gray-800">
+            Create an account
+          </h2>
+          <p className="text-sm text-gray-500 mt-2">
+            Please fill in the form to continue
+          </p>
         </div>
 
+        {/* Form */}
         <form onSubmit={onSubmit} className="space-y-5">
           <div>
-            <label className="block text-sm text-gray-700 mb-1">
+            <label className="block text-gray-700 text-sm mb-1">
               Full Name
             </label>
             <input
               type="text"
-              name="name"
-              placeholder="Your full name"
-              className="w-full border border-gray-300 px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="e.g. John Doe"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-sm"
+              required
             />
           </div>
 
           <div>
-            <label className="block text-sm text-gray-700 mb-1">Username</label>
+            <label className="block text-gray-700 text-sm mb-1">Username</label>
             <input
               type="text"
-              name="username"
-              placeholder="Choose a username"
-              className="w-full border border-gray-300 px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="e.g. johndoe123"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-sm"
+              required
             />
           </div>
 
           <div>
-            <label className="block text-sm text-gray-700 mb-1">Password</label>
+            <label className="block text-gray-700 text-sm mb-1">Password</label>
             <input
               type="password"
-              name="password"
-              placeholder="Create a password"
-              className="w-full border border-gray-300 px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Enter your password"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-sm"
+              required
             />
           </div>
 
           <button
             type="submit"
-            className="w-full bg-[#0078ff] hover:bg-[#005fd1] text-white py-2 rounded-md font-semibold transition"
+            className="w-full bg-gradient-to-r from-green-500 to-green-600 text-white py-2.5 rounded-lg font-semibold shadow hover:from-green-600 hover:to-green-700 transition"
           >
             Register
           </button>
         </form>
 
-        <div className="mt-6 text-sm text-center text-gray-600">
-          이미 계정이 있으신가요?{" "}
-          <NavLink to="/login" className="text-blue-600 hover:underline">
+        {/* Redirect to Login */}
+        <p className="text-center text-sm text-gray-500">
+          Already have an account?{" "}
+          <NavLink to="/login" className="text-green-600 underline font-medium">
             Sign In
           </NavLink>
-        </div>
+        </p>
       </div>
     </div>
   );

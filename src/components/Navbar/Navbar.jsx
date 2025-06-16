@@ -1,14 +1,18 @@
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { FaBars, FaSearch, FaUser, FaHeart } from "react-icons/fa";
 
 import CartIcon from "../cardIcon/CardIcon";
 
 const Navbar = () => {
+  const navigate = useNavigate();
   return (
     <nav className="bg-white shadow-sm border-b border-gray-200 w-full z-50">
       <div className="flex items-center justify-between px-4 md:px-10 lg:px-20 py-3">
+        {/* Logo & Menu Icon */}
         <div className="flex items-center space-x-4">
-          <FaBars className="text-xl mb-2 text-gray-600 cursor-pointer" />
+          <button className="md:hidden">
+            <FaBars className="text-xl text-gray-600 cursor-pointer" />
+          </button>
           <Link to="/">
             <img
               src="//static.coupangcdn.com/image/static/login/logo-coupang.x2.20201201.png"
@@ -18,7 +22,8 @@ const Navbar = () => {
           </Link>
         </div>
 
-        <div className="flex-1 mx-4 relative max-w-2xl w-full">
+        {/* Search Bar */}
+        <div className="flex-1 mx-4 relative max-w-xl w-full hidden sm:block">
           <form>
             <input
               type="text"
@@ -29,26 +34,32 @@ const Navbar = () => {
           </form>
         </div>
 
-        <div className="flex items-center space-x-6 relative">
-          <Link to="/wish" className="relative">
+        {/* Icons */}
+        <div className="flex items-center space-x-4 sm:space-x-6">
+          <Link to="/wish">
             <FaHeart className="text-lg text-gray-600 hover:text-red-500" />
           </Link>
 
-          <div className="flex items-center space-x-6 relative">
-            <CartIcon />
+          <CartIcon />
+
+          <div className="hidden md:block">
+            <NavLink
+              to="/login"
+              className="text-sm text-gray-700 hover:underline"
+            >
+              Sign In | Register
+            </NavLink>
           </div>
 
-          <button className="hidden md:block text-sm text-gray-700 hover:underline">
-            Sign In | Register
-          </button>
-          <button className="md:hidden">
+          <div className="md:hidden">
             <FaUser className="text-lg text-gray-600" />
-          </button>
+          </div>
         </div>
       </div>
 
-      <div className="bg-gray-50 border-t border-gray-100 text-sm font-medium text-gray-700">
-        <div className="flex justify-center items-center space-x-6 py-3">
+      {/* Bottom Menu - Responsive */}
+      <div className="bg-gray-50 border-t border-gray-100 text-sm font-medium text-gray-700 hidden md:flex">
+        <div className="flex justify-center items-center space-x-6 py-3 w-full">
           <NavLink to="/" className="hover:text-blue-600">
             Home
           </NavLink>

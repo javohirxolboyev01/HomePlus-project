@@ -3,12 +3,10 @@ import { useParams } from "react-router-dom";
 import useFetch from "../hook/useFetch";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../redux/feature/cartSlice";
-import {
-  removeFromCart,
-  increaseQuantity,
-  decreaseQuantity,
-} from "../redux/feature/cartSlice";
-
+import Humo from "../../assets/Pay carta/Humo.webp";
+import Click from "../../assets/Pay carta/click.webp";
+import Payme from "../../assets/Pay carta/payme.webp";
+import Uzum from "../../assets/Pay carta/uzum.webp";
 const ProductDetailes = () => {
   const { id } = useParams();
   const [index, setIndex] = useState(0);
@@ -117,22 +115,18 @@ const ProductDetailes = () => {
               To‘lov usullari:
             </p>
             <div className="flex items-center gap-3">
+              <img src={Humo} alt="Humo" className="w-12 h-5 object-contain" />
               <img
-                src="/images/humo.png"
-                className="h-8 w-auto object-contain"
+                src={Click}
+                alt="Click"
+                className="w-20 h-16 object-contain"
               />
               <img
-                src="/images/click.png"
-                className="h-8 w-auto object-contain rounded"
+                src={Payme}
+                alt="Payme"
+                className="w-19 h-15 object-contain"
               />
-              <img
-                src="/images/payme.png"
-                className="h-8 w-auto object-contain"
-              />
-              <img
-                src="/images/uzum.png"
-                className="h-8 w-auto object-contain rounded"
-              />
+              <img src={Uzum} alt="Uzum" className="w-18 h-10 object-contain" />
             </div>
           </div>
         </div>

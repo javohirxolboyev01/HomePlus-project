@@ -68,13 +68,16 @@ const Footer = () => {
               <FaLinkedin />
             </a>
           </div>
-          <form className="flex">
+          <form className="flex flex-col sm:flex-row w-full max-w-md mx-auto">
             <input
-              type="text"
+              type="email"
               placeholder="Your email"
-              className="flex-1 px-3 py-2 rounded-l-md bg-gray-700 border border-gray-600 placeholder-gray-400 text-sm"
+              className="flex-1 px-4 py-2 rounded-t-md sm:rounded-t-none sm:rounded-l-md bg-gray-700 border border-gray-600 placeholder-gray-400 text-sm text-white focus:outline-none"
             />
-            <button className="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-r-md text-white font-semibold text-sm">
+            <button
+              type="submit"
+              className="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-b-md sm:rounded-b-none sm:rounded-r-md text-white font-semibold text-sm"
+            >
               Subscribe
             </button>
           </form>
